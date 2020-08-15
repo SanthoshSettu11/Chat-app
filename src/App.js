@@ -11,6 +11,7 @@ import theme from "./theme";
 import { stopLoader, showLoader } from "../src/store/Loader/LoaderActions";
 import Loader from "./views/StyledMaterialComponents/Loader";
 import SignUp from "./views/SignUp/SignUp";
+import SnackBar from "./views/Common/SnackBar/SnackBar";
 
 function App(props) {
   useEffect(() => {
@@ -42,6 +43,7 @@ function App(props) {
         </Router>
       </div>
       {props.isShowLoader && <Loader open={props.isShowLoader}></Loader>}
+      <SnackBar />
     </ThemeProvider>
   );
 }
