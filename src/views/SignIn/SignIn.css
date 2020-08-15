@@ -1,0 +1,23 @@
+.signincontainer {
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  place-content: center;
+  flex-direction: column;
+}
+
+.signincontainer_createonelabel {
+  color: lightblue;
+}
+
+.signincontainer_createonelabel:hover {
+  cursor: pointer;
+}
+
+.signincontainer_signuplink {
+  text-decoration: none !important;
+  color: inherit !important;
+}

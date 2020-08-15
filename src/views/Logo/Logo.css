@@ -1,0 +1,14 @@
+.logocontainer_logo {
+  width: 200px !important;
+  height: 200px !important;
+  color: lightblue !important;
+  place-content: center;
+}
+
+.logocontainer_logolabel {
+  font-size: 16px;
+  font-weight: 500;
+  color: lightblue;
+  position: relative;
+  top: -58%;
+}
