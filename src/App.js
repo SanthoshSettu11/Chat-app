@@ -41,9 +41,9 @@ function App(props) {
             </Route>
           </Switch>
         </Router>
+        <SnackBar />
       </div>
       {props.isShowLoader && <Loader open={props.isShowLoader}></Loader>}
-      <SnackBar />
     </ThemeProvider>
   );
 }
