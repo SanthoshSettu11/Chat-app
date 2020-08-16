@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignUp.css";
 import Logo from "../Logo/Logo";
 import StyledInput from "../StyledMaterialComponents/StyledInput";
 import StyledButton from "../StyledMaterialComponents/StyledButton";
 import Otp from "../Otp/Otp";
-import { postMethod } from "../../services/ApiService";
-import { SIGNUPVALIDATION } from "../../services/Constants";
+import { postMethod, getMethod } from "../../services/ApiService";
+import { SIGNUPVALIDATION, OTPGENERATION } from "../../services/Constants";
 
 function SignUp() {
   const [mobile, setmobile] = useState("");
@@ -40,6 +40,25 @@ function SignUp() {
     }
     return true;
   };
+
+  useEffect(() => {
+    const req = {
+      mobileNumber: countryCode + "" + mobile
+    };
+    getMethod(OTPGENERATION, req)
+      .then((res) => {
+        console.log(res);
+        setOtp("5555");
+        setIsOTPValidation(true);
+        setTimeout(() => {
+          setOtp("");
+        }, 10000);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => {};
+  }, []);
 
   return (
     <div className="signupcontainer">

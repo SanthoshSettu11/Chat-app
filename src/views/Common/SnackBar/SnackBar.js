@@ -24,6 +24,7 @@ function SnackBar(props) {
           horizontal: "center"
         }}
         message={<span>{message}</span>}
+        onClose={() => handleClose()}
       ></Snackbar>
     </div>
   );
