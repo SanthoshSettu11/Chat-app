@@ -11,7 +11,6 @@ import theme from "./theme";
 import { stopLoader, showLoader } from "../src/store/Loader/LoaderActions";
 import Loader from "./views/StyledMaterialComponents/Loader";
 import SignUp from "./views/SignUp/SignUp";
-import SnackBar from "./views/Common/SnackBar/SnackBar";
 
 function App(props) {
   useEffect(() => {
@@ -20,10 +19,9 @@ function App(props) {
   }, []);
 
   const stop = () => {
-    setTimeout(() => {
-      props.stopLoader();
-    }, 5000);
+    props.stopLoader();
   };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -41,7 +39,6 @@ function App(props) {
             </Route>
           </Switch>
         </Router>
-        <SnackBar />
       </div>
       {props.isShowLoader && <Loader open={props.isShowLoader}></Loader>}
     </ThemeProvider>

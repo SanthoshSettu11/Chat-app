@@ -3,25 +3,23 @@ import { environment_URL } from "../environment/base";
 
 export const getMethod = async (request, requestObject) => {
   const url = environment_URL.baseURL + request;
-  await axios
+  let response = {};
+  response = await axios
     .get(url, {
-      data: requestObject,
-      crossorigin: true,
-      withCredentials: true,
+      mode: "cors",
       headers: {
         "Access-Control-Allow-Origin": "*",
-        referrer: "no-referrer",
-        Referer: "no-referrer",
-        credentials: true,
-        method: "GET,OPTIONS,POST"
-      }
+        "Content-Type": "application/json"
+      },
+      data: JSON.stringify(requestObject)
     })
     .then((response) => {
-      return response;
+      return response.data;
     })
     .catch((exp) => {
       throw exp;
     });
+  return await response;
 };
 
 export const postMethod = async (request, requestObject) => {
@@ -32,12 +30,20 @@ export const postMethod = async (request, requestObject) => {
       "Access-Control-Allow-Origin": "*"
     }
   };
-  await axios
-    .get(url, requestObject, axiosConfig)
+  let response = {};
+  response = await axios
+    .post(url, requestObject, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        withCredentials: true
+      }
+    })
     .then((response) => {
-      return response;
+      return response.data;
     })
     .catch((exp) => {
       throw exp;
     });
+  return await response;
 };

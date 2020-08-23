@@ -1,36 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import "./SignUp.css";
 import Logo from "../Logo/Logo";
 import StyledInput from "../StyledMaterialComponents/StyledInput";
-import StyledButton from "../StyledMaterialComponents/StyledButton";
+import StyledButton from "../StyledMaterialComponents/Loader";
 import Otp from "../Otp/Otp";
 import { postMethod, getMethod } from "../../services/ApiService";
-import { SIGNUPVALIDATION, OTPGENERATION } from "../../services/Constants";
+import {
+  SIGNUPVALIDATION,
+  OTPGENERATION,
+  SIGNUPREGISTRATION
+} from "../../services/Constants";
+import PhoneInput from "react-phone-input-2";
+import { useDispatch, useSelector } from "react-redux";
+import { showLoader, stopLoader } from "../../store/Loader/LoaderActions";
 
 function SignUp() {
   const [mobile, setmobile] = useState("");
+  const [rawPhone, setrawPhone] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [profileName, setProfileName] = useState("");
   const [otp, setOtp] = useState("");
   const [isOtpValidation, setIsOTPValidation] = useState(false);
+  const dispatch = useDispatch();
 
   const signUpClicked = () => {
     if (isValidate()) {
       const req = {
-        mobileNumber: countryCode + "" + mobile
+        mobileNumber: mobile
       };
+      dispatch(showLoader());
       postMethod(SIGNUPVALIDATION, req)
         .then((res) => {
-          console.log(res);
-          setOtp("5555");
-          setIsOTPValidation(true);
-          setTimeout(() => {
-            setOtp("");
-          }, 10000);
+          if (res.response) {
+            setOtp(res.response.otp);
+            setIsOTPValidation(true);
+          }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            dispatch(stopLoader());
+          }
+        );
     }
   };
 
@@ -41,24 +54,39 @@ function SignUp() {
     return true;
   };
 
-  useEffect(() => {
-    const req = {
-      mobileNumber: countryCode + "" + mobile
-    };
-    getMethod(OTPGENERATION, req)
-      .then((res) => {
-        console.log(res);
-        setOtp("5555");
-        setIsOTPValidation(true);
-        setTimeout(() => {
-          setOtp("");
-        }, 10000);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return () => {};
-  }, []);
+  const submitOtp = (event) => {
+    if (event) {
+      const req = {
+        mobileNumber: rawPhone,
+        userName: profileName,
+        countryCode: countryCode
+      };
+      dispatch(showLoader());
+      postMethod(SIGNUPREGISTRATION, req)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            dispatch(stopLoader());
+          }
+        );
+    }
+  };
+
+  const handleOnChange = ({ value, country, e, formattedValue }) => {
+    setrawPhone(value.slice(country.dialCode.length));
+    setmobile(formattedValue);
+    setCountryCode(country.dialCode);
+  };
+
+  const closeOtp = () => {
+    setIsOTPValidation(false);
+    dispatch(stopLoader());
+  };
 
   return (
     <div className="signupcontainer">
@@ -71,25 +99,31 @@ function SignUp() {
         onChange={(e) => setProfileName(e.target.value)}
       ></StyledInput>
       <div className="display_flex signupcontainer_spacebetween">
-        <StyledInput
-          className="signupcontainer_countrycode"
-          type="input"
-          color="secondary"
-          placeholder="Country Code"
-          value={countryCode}
-          onChange={(e) => setCountryCode(e.target.value)}
-        ></StyledInput>
-        <StyledInput
-          className="signupcontainer_mobilenumber"
-          type="input"
-          color="secondary"
-          placeholder="Mobile Number"
+        <PhoneInput
+          country={"in"}
           value={mobile}
-          onChange={(e) => setmobile(e.target.value)}
-        ></StyledInput>
+          inputProps={{
+            disableCountryCode: true,
+            countryCodeEditable: false
+          }}
+          onChange={(value, country, e, formattedValue) =>
+            handleOnChange({ value, country, e, formattedValue })
+          }
+        />
       </div>
       <StyledButton onClick={signUpClicked}>Sign Up!</StyledButton>
-      {isOtpValidation && <Otp TempOtp={otp} />}
+      {
+        isOtpValidation && (
+          // <ForwardRef>
+          <Otp
+            TempOtp={otp}
+            mobileNumber={mobile}
+            onSubmit={(e) => submitOtp(e)}
+            onClose={() => closeOtp()}
+          />
+        )
+        // </ForwardRef>
+      }
     </div>
   );
 }

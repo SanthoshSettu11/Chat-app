@@ -9,34 +9,40 @@ import {
   DialogActions,
   Button
 } from "@material-ui/core";
+import { OTPGENERATION } from "../../services/Constants";
+import { getMethod } from "../../services/ApiService";
 
 function Otp(props) {
   const [open, setOpen] = useState(true);
-  const [otp, setOtp] = useState("");
+  const [otpValue, setOtpValue] = useState("");
   const [isInvalidOtp, setIsInvalidOtp] = useState(false);
+  const [isExpiredOtp, setIsExpiredOtp] = useState(false);
 
   useEffect(() => {
-    setOtp(true);
+    setOtpValue("");
+    expireOtp();
     return () => {
       cleanup();
     };
   }, []);
 
   const cleanup = () => {
-    otp("");
-    isInvalidOtp("");
+    setOtpValue("");
+    setIsInvalidOtp(false);
+    props.onClose();
   };
 
   const handleOtpChange = (event) => {
-    if (event.length <= 4) {
-      setOtp(event);
+    if (event.length <= 6) {
+      setOtpValue(event);
     }
   };
 
   const handleClose = () => {
     setIsInvalidOtp(false);
-    if (otp === props.TempOtp) {
+    if (otpValue == props.TempOtp && !isExpiredOtp) {
       setOpen(false);
+      props.onSubmit(true);
     } else {
       setIsInvalidOtp(true);
     }
@@ -44,6 +50,26 @@ function Otp(props) {
 
   const cancel = () => {
     setOpen(false);
+    props.onClose();
+  };
+
+  const expireOtp = () => {
+    setTimeout(() => {
+      setIsExpiredOtp(true);
+    }, 1000 * 60 * 10);
+  };
+
+  const ResendOtp = () => {
+    const req = {
+      mobileNumber: props.mobileNumber
+    };
+    getMethod(OTPGENERATION, req)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -55,13 +81,17 @@ function Otp(props) {
           <Input
             type="input"
             placeholder="Otp"
-            value={otp}
+            value={otpValue}
             onChange={(e) => handleOtpChange(e.target.value)}
             fullWidth
           />
           {isInvalidOtp && (
             <DialogContentText className="error">Invalid Otp</DialogContentText>
           )}
+          {isExpiredOtp && (
+            <DialogContentText className="error">Invalid Otp</DialogContentText>
+          )}
+          <DialogContentText class="resend-link">Resend OTP</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={cancel} color="primary">
