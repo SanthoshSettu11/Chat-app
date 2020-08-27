@@ -1,8 +1,8 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignUp.css";
 import Logo from "../Logo/Logo";
 import StyledInput from "../StyledMaterialComponents/StyledInput";
-import StyledButton from "../StyledMaterialComponents/Loader";
+import StyledButton from "../StyledMaterialComponents/StyledButton";
 import Otp from "../Otp/Otp";
 import { postMethod, getMethod } from "../../services/ApiService";
 import {
@@ -10,9 +10,9 @@ import {
   OTPGENERATION,
   SIGNUPREGISTRATION
 } from "../../services/Constants";
-import PhoneInput from "react-phone-input-2";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoader, stopLoader } from "../../store/Loader/LoaderActions";
+import PhoneInput from "react-phone-input-2";
 
 function SignUp() {
   const [mobile, setmobile] = useState("");
@@ -36,14 +36,12 @@ function SignUp() {
             setIsOTPValidation(true);
           }
         })
-        .catch(
-          (error) => {
-            console.log(error);
-          },
-          () => {
-            dispatch(stopLoader());
-          }
-        );
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          dispatch(stopLoader());
+        });
     }
   };
 
