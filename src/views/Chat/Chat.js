@@ -7,10 +7,19 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import MicIcon from "@material-ui/icons/Mic";
 
-function Chat({ userId }) {
+function Chat({ userId, toUserId, ws }) {
   const [input, setInput] = useState("");
   const sendMessage = (e) => {
     e.preventDefault();
+    ws.send(
+      '{"action":"LC_03","userId":"' +
+        userId +
+        '","to":"' +
+        toUserId +
+        '","message":"' +
+        input +
+        '"}'
+    );
     setInput("");
   };
   return (

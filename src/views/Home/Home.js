@@ -26,7 +26,11 @@ function Home() {
     dispatch(updateSocket(ws));
   }, []);
 
-  return <div>{ws && <Chat userId={toUserId} webSocket={ws}></Chat>}</div>;
+  return (
+    <div>
+      {ws && <Chat userId={userId} toUserId={toUserId} webSocket={ws}></Chat>}
+    </div>
+  );
 }
 
 export default Home;
