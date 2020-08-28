@@ -7,7 +7,7 @@ function AuthRoute(props) {
     isLoggedIn: state.loginReducer.isLoggedIn
   }));
   if (isLoggedIn && !props.isHome) return <Redirect to="/home" />;
-  else if (!isLoggedIn && !props.isSignUp && props.isRoot)
+  else if (!isLoggedIn && !props.isSignUp && (props.isRoot || props.isHome))
     return <Redirect to="/signin" />;
   return <Route {...props} />;
 }

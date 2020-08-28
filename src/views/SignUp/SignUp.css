@@ -23,3 +23,11 @@
 .signupcontainer_spacebetween {
   padding: 8px 0px 8px 0px;
 }
+
+.react-tel-input .country-list .country {
+  text-align: left;
+}
+
+.react-tel-input .country-list {
+  color: #333333;
+}

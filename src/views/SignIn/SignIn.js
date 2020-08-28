@@ -10,6 +10,7 @@ import { USERLOGIN } from "../../services/Constants";
 import { postMethod } from "../../services/ApiService";
 import { loggedIn } from "../../store/Login/LoginActions";
 import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 function SignIn(props) {
   const [mobile, setmobile] = useState("+91");

@@ -8,8 +8,9 @@ export const getMethod = async (request, requestObject) => {
     .get(url, {
       mode: "cors",
       headers: {
+        "Content-Type": "application/json;charset=UTF-8",
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
+        "Access-Control-Allow-Credentials": "true"
       },
       data: JSON.stringify(requestObject)
     })
@@ -26,18 +27,20 @@ export const postMethod = async (request, requestObject) => {
   const url = environment_URL.baseURL + request;
   let axiosConfig = {
     headers: {
-      "Content-Type": "application/json;charset=UTF-8",
       "Access-Control-Allow-Origin": "*"
     }
   };
   let response = {};
   response = await axios
     .post(url, requestObject, {
+      mode: "cors",
       headers: {
-        "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
-        withCredentials: true
-      }
+        "Access-Control-Allow-Origin": "*",
+        "Accept-Type": "application/json",
+        "Access-Control-Allow-Headers": "*"
+      },
+      withCredentials: false
     })
     .then((response) => {
       return response.data;

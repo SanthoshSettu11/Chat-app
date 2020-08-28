@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { showLoader, stopLoader } from "../../store/Loader/LoaderActions";
 import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 function SignUp() {
   const [mobile, setmobile] = useState("");

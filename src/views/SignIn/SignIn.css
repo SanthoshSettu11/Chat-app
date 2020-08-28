@@ -21,3 +21,11 @@
   text-decoration: none !important;
   color: inherit !important;
 }
+
+.react-tel-input .country-list .country {
+  text-align: left;
+}
+
+.react-tel-input .country-list {
+  color: #333333;
+}
